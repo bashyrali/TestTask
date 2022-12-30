@@ -1,0 +1,38 @@
+﻿@model TestApp.Models.Dtos.ClientVm
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h3 class="font-weight-normal">Поиск клиента в АФМ</h3>
+    <form asp-action="Index" asp-controller="Home" method="post">
+        <div class="form-group">
+            <input asp-for="Iin" type="number" placeholder="Введите ИИН">
+            <span asp-validation-for="Iin"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="Email" type="email" placeholder="Введите Email">
+            <span asp-validation-for="Email"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Выполнить новый поиск</button>
+    </form>
+</div>
+@* //Надо доработать// *@
+@if (Model is not null && Model.IsAvailable)
+{
+    <div class="text-center">Клиент не обнаружен</div>
+    <div class="text-center text-muted">Проведение сделок с данным клиентом возможно</div>
+}
+else if (Model is not null && !Model.IsAvailable)
+{
+    <div class="text-center text-danger">Клиент обнаружен</div>
+    <div class="text-center text-muted">Проведение сделок с клиентом не рекомендуется</div>
+}
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

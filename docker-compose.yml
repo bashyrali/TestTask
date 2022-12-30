@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  test-service:
+    image: ${DOCKER_REGISTRY-}test-app
+    container_name: test-service
+    depends_on:
+      - test_db
+    ports:
+      - "1000:80"
+    build:
+      context: .
+      dockerfile: "TestApp/Dockerfile"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=test_db;Port=5431;Database=TestDb;User Id=postgres;Password=postgres;Pooling=true;
+  test_db:
+    image: postgres:latest
+    container_name: test_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=TestDb
+    ports:
+      - "5431:5432"
+    restart: always
+    volumes:
+      - test-data:/var/lib/postgresql/data/
+volumes:
+  test-data:
